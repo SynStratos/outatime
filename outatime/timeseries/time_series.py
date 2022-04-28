@@ -1,14 +1,10 @@
 import pickle
-from copy import copy
 from datetime import date
 from functools import cached_property
 from typing import List
-import numpy as np
-from scipy.interpolate import interp1d
 
 from ..dataclass.time_series_data import TimeSeriesData
 from ..granularity.granularity import Granularity, DailyGranularity
-from ..granularity.utils import get_first_available_beginning
 from ..util.bisect import index_of, find_delimiters
 
 
@@ -164,25 +160,22 @@ class TimeSeries(List[TimeSeriesData]):
             default_data (None, optional): Data to store in days that
             can't be found. Defaults to None.
         """
-        fst_av_beg = get_first_available_beginning(
-            day=self.start_date,
-            input_granularity=self.data_granularity,
-            output_granularity=granularity
-        )
         f_day = granularity.get_n_day_of_granularity(
-            day=fst_av_beg,
+            day=self.start_date,
             idx=index_of_granularity
         )
         resampled = []
         temp_ts = self.__deepcopy__()
 
-        while f_day <= self.end_date:
+        resampling_end_date = granularity.get_end_of_granularity(self.end_date)
+
+        while f_day <= resampling_end_date:
             resampled.append(
                 temp_ts.get(f_day, value=default_data)
             )
-            fst_av_beg += granularity.delta
+            f_day += granularity.delta
             f_day = granularity.get_n_day_of_granularity(
-                day=fst_av_beg,
+                day=f_day,
                 idx=index_of_granularity
             )
 

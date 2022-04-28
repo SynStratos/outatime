@@ -1,7 +1,7 @@
 <p align="center" width="100%">
-    <img width=60%" src="docs/img.png"> 
+    <img width=60%" src="https://github.com/SynStratos/outatime/blob/main/docs/outatime_banner.png"> 
 </p>
-<div style="text-align: center;" width="100%">Python Framework to Manage Time Series.</div>
+Python Framework to Manage Time Series.
 
 ## Overview
 The main goal of this framework is to simplify the collection of temporal data and related operations.
