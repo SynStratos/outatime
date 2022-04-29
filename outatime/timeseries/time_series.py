@@ -183,7 +183,7 @@ class TimeSeries(List[TimeSeriesData]):
             self[:] = resampled
             self.data_granularity = granularity
         else:
-            return TimeSeries(resampled, data_granularity=granularity)
+            return self.__class__(resampled, data_granularity=granularity)
 
     def update(self, __list: List[TimeSeriesData]):
         """

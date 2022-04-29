@@ -2,11 +2,13 @@ import setuptools
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
+    long_description = long_description.split("</p>")[1]
+    long_description = "![](https://github.com/SynStratos/outatime/blob/main/docs/outatime_banner.png)" + long_description
 
 setuptools.setup(
     name='outatime',
     packages=setuptools.find_packages(),
-    version='1.0.1',
+    version='1.0.2',
     description='Python framework to manage time series.',
     long_description=long_description,
     long_description_content_type="text/markdown",
