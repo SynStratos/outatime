@@ -3,9 +3,9 @@ from ..timeseries.time_series import TimeSeries
 
 
 def take_first_available(a, b):
-    if all([a, b]):
+    if a is not None:
         return a
-    elif b:
+    elif b is not None:
         return b
     else:
         raise Exception("Both arguments are None.")
@@ -19,20 +19,23 @@ def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method=take_firs
     Args:
         tsl_a (TimeSeries): First input time series.
         tsl_b (TimeSeries): Second input time series.
+        conflict_method (None, optional): Method to apply when choosing
+        data for matching days. Defaults to take_first_available.
 
     Returns:
         TimeSeries: Output timeseries with shared days.
     """
-    intersection_dates = tsl_a.dates and tsl_b.dates
-    res = []
+    intersection_dates = list(set(tsl_a.dates) & set(tsl_b.dates))
+    intersection_dates.sort()
+    intersection_result = []
     for int_date in intersection_dates:
-        res.append(
+        intersection_result.append(
             TimeSeriesData(
                 day=int_date,
                 data=conflict_method(tsl_a.get(day=int_date).data, tsl_b.get(day=int_date).data)
             )
         )
-    return TimeSeries(res)
+    return TimeSeries(intersection_result)
 
 
 def union(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method=take_first_available) -> TimeSeries:
@@ -43,17 +46,20 @@ def union(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method=take_first_avail
     Args:
         tsl_a (TimeSeries): First input time series.
         tsl_b (TimeSeries): Second input time series.
+        conflict_method (None, optional): Method to apply when choosing
+        data for matching days. Defaults to take_first_available.
 
     Returns:
         TimeSeries: Output timeseries with all days.
     """
-    union_dates = tsl_a.dates or tsl_b.dates
-    res = []
-    for int_date in union_dates:
-        res.append(
+    union_dates = list(set(tsl_a.dates) | set(tsl_b.dates))
+    union_dates.sort()
+    union_result = []
+    for uni_date in union_dates:
+        union_result.append(
             TimeSeriesData(
-                day=int_date,
-                data=conflict_method(tsl_a.get(day=int_date).data, tsl_b.get(day=int_date).data)
+                day=uni_date,
+                data=conflict_method(tsl_a.get(day=uni_date).data, tsl_b.get(day=uni_date).data)
             )
         )
-    return TimeSeries(res)
+    return TimeSeries(union_result)
