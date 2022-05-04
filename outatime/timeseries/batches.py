@@ -66,7 +66,7 @@ def aggregate(
 
         idx_min, idx_max = find_delimiters(temp_ts.dates, batch_beginning, batch_end)
 
-        subset = temp_ts[idx_min:idx_max]
+        subset = temp_ts[idx_min:idx_max+1]
         if len(subset) > 0:
             res.append(
                 TimeSeriesData(
@@ -75,7 +75,7 @@ def aggregate(
                 )
             )
 
-        temp_ts = temp_ts[idx_max:]
+        temp_ts = temp_ts[idx_max+1:]
         batch_beginning += granularity.delta
         batch_beginning = granularity.get_n_day_of_granularity(batch_beginning, first_day_of_batch)
         batch_end = granularity.get_n_day_of_granularity(day=batch_beginning, idx=last_day_of_batch)
@@ -214,13 +214,13 @@ def split(
     while batch_end <= end_date:
         idx_min, idx_max = find_delimiters(temp_ts.dates, batch_beginning, batch_end)
 
-        subset = temp_ts[idx_min:idx_max]
+        subset = temp_ts[idx_min:idx_max+1]
         if len(subset) > 0:
             res.append(
                 subset
             )
 
-        temp_ts = temp_ts[idx_max:]
+        temp_ts = temp_ts[idx_max+1:]
         batch_beginning += granularity.delta
         batch_beginning = granularity.get_n_day_of_granularity(batch_beginning, first_day_of_batch)
         batch_end = granularity.get_n_day_of_granularity(day=batch_beginning, idx=last_day_of_batch)

@@ -102,10 +102,10 @@ class TimeSeries(List[TimeSeriesData]):
         idx_min, idx_max = find_delimiters(self.dates, min_date, max_date)
 
         if inplace:
-            self[:] = self[idx_min:idx_max]
+            self[:] = self[idx_min:idx_max+1]
             self.__clear_cache()
         else:
-            return self.__deepcopy__()[idx_min:idx_max]
+            return self.__deepcopy__()[idx_min:idx_max+1]
 
     def delete(self, day: date):
         """Delete item by day."""
