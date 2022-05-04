@@ -98,13 +98,13 @@ class Granularity(ABC):
 
         Args:
             day (date): Input date.
-            weekday (int): Number of the day of the week [1-7].
+            weekday (int): Number of the day of the week (0-indexed).
             idx (int): Number of the day to retrieve (0-indexed).
 
         Returns:
             date: N-th day of the week of the granularity step.
         """
-        assert 1 <= weekday <= 7, "Weekday must be between 1 and 7."
+        assert 0 <= weekday <= 6, "Weekday must be between 0 and 6."
         first_day = self.get_beginning_of_granularity(day)
         last_day = self.get_end_of_granularity(day)
         n_days, days = weekdays_of_range(first_day, last_day, weekday)

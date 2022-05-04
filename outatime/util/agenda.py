@@ -20,8 +20,6 @@ WEEKMASK = [
 
 WEEKDAYS = [MO, TU, WE, TH, FR, SA, SU]
 
-weekday_assertion_msg = "Weekday must be between 1 and 7."
-
 
 @day_or_datetime
 def get_quarter(day: date) -> int:
@@ -99,7 +97,7 @@ def days_of_quarter(day: date) -> int:
     """
     first_day = first_day_of_quarter(day)
     last_day = last_day_of_quarter(day)
-    return (last_day - first_day).days
+    return (last_day - first_day).days + 1
 
 
 @day_or_datetime
@@ -133,7 +131,7 @@ def weekdays_of_range(start_date: date, end_date: date, weekday: int, exclusive:
     Args:
         start_date (date):
         end_date (date):
-        weekday (int): Number of the day of the week (1-indexed).
+        weekday (int): Number of the day of the week (0-indexed).
         exclusive (bool, optional): Don't include end_date in the
         searched range. Defaults to False.
 
@@ -141,12 +139,12 @@ def weekdays_of_range(start_date: date, end_date: date, weekday: int, exclusive:
         int: Number of found days.
         list: List of found days.
     """
-    assert 1 <= weekday <= 7, weekday_assertion_msg
+    assert 0 <= weekday <= 6, "Weekday must be between 0 and 6."
     day_times = rrule(
         freq=DAILY,
         dtstart=start_date,
         until=end_date + relativedelta(days=int(exclusive)),
-        byweekday=(WEEKDAYS[weekday-1])
+        byweekday=(WEEKDAYS[weekday])
     )
     days = [day_time.date() for day_time in day_times]
     n_days = len(days)

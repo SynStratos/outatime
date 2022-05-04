@@ -57,25 +57,28 @@ def aggregate(
     end_date = ts.end_date if drop_tails else granularity.get_end_of_granularity(ts.end_date)
 
     batch_beginning = __next_batch_beginning(ts.start_date)
+    batch_end = granularity.get_n_day_of_granularity(day=batch_beginning, idx=last_day_of_batch)
 
     temp_ts = deepcopy(ts)
 
-    while batch_beginning <= end_date:
-        batch_end = granularity.get_n_day_of_granularity(day=batch_beginning, idx=last_day_of_batch)
+    while batch_end <= end_date:
         reference_day = granularity.get_n_day_of_granularity(day=batch_beginning, idx=store_day_of_batch)
 
         idx_min, idx_max = find_delimiters(temp_ts.dates, batch_beginning, batch_end)
 
-        res.append(
-            TimeSeriesData(
-                day=reference_day,
-                data=method([element.data for element in temp_ts[idx_min:idx_max]])
+        subset = temp_ts[idx_min:idx_max]
+        if len(subset) > 0:
+            res.append(
+                TimeSeriesData(
+                    day=reference_day,
+                    data=method([element.data for element in temp_ts[idx_min:idx_max]])
+                )
             )
-        )
 
         temp_ts = temp_ts[idx_max:]
         batch_beginning += granularity.delta
-        batch_beginning = __next_batch_beginning(batch_beginning)
+        batch_beginning = granularity.get_n_day_of_granularity(batch_beginning, first_day_of_batch)
+        batch_end = granularity.get_n_day_of_granularity(day=batch_beginning, idx=last_day_of_batch)
 
     return TimeSeries(res)
 
@@ -106,7 +109,7 @@ def pick_a_day(
 
     f_day = granularity.get_n_day_of_granularity(ts.start_date, day_of_batch)
     if f_day < ts.start_date:
-        f_day = f_day + granularity.delta
+        f_day += granularity.delta
 
     while f_day <= ts.end_date:
         res.append(
@@ -123,7 +126,7 @@ def pick_a_weekday(
         ts: TimeSeries,
         granularity: Granularity = WeeklyGranularity(),
         day_of_batch: int = -1,
-        weekday: int = 1
+        weekday: int = 0
 ) -> TimeSeries:
     """
     Divides the input time series in many sub-sets for each contained time step
@@ -145,20 +148,17 @@ def pick_a_weekday(
     assert day_of_batch >= -1, "'day_of_batch' can't be lesser than -1."
 
     res = []
-    fst_av_beg = get_first_available_beginning(
-        day=ts.start_date,
-        input_granularity=ts.data_granularity,
-        output_granularity=granularity
-    )
-    f_day = granularity.get_n_weekday_of_granularity(day=fst_av_beg, weekday=weekday, idx=day_of_batch)
+    f_day = granularity.get_n_weekday_of_granularity(day=ts.start_date, weekday=weekday, idx=day_of_batch)
+    if f_day < ts.start_date:
+        f_day = granularity.get_n_weekday_of_granularity(day=ts.start_date+granularity.delta, weekday=weekday, idx=day_of_batch)
 
     while f_day <= ts.end_date:
         res.append(
             deepcopy(ts.get(day=f_day, value=None))
         )
 
-        fst_av_beg += granularity.delta
-        f_day = granularity.get_n_weekday_of_granularity(day=fst_av_beg, weekday=weekday, idx=day_of_batch)
+        f_day += granularity.delta
+        f_day = granularity.get_n_weekday_of_granularity(day=f_day, weekday=weekday, idx=day_of_batch)
 
     return TimeSeries(res)
 
@@ -207,20 +207,22 @@ def split(
     end_date = ts.end_date if drop_tails else granularity.get_end_of_granularity(ts.end_date)
 
     batch_beginning = __next_batch_beginning(ts.start_date)
+    batch_end = granularity.get_n_day_of_granularity(day=batch_beginning, idx=last_day_of_batch)
 
     temp_ts = deepcopy(ts)
 
-    while batch_beginning <= end_date:
-        batch_end = granularity.get_n_day_of_granularity(day=batch_beginning, idx=last_day_of_batch)
-
+    while batch_end <= end_date:
         idx_min, idx_max = find_delimiters(temp_ts.dates, batch_beginning, batch_end)
 
-        res.append(
-            temp_ts[idx_min:idx_max]
-        )
+        subset = temp_ts[idx_min:idx_max]
+        if len(subset) > 0:
+            res.append(
+                subset
+            )
 
         temp_ts = temp_ts[idx_max:]
         batch_beginning += granularity.delta
-        batch_beginning = __next_batch_beginning(batch_beginning)
+        batch_beginning = granularity.get_n_day_of_granularity(batch_beginning, first_day_of_batch)
+        batch_end = granularity.get_n_day_of_granularity(day=batch_beginning, idx=last_day_of_batch)
 
     return res
