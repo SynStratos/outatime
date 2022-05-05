@@ -1,13 +1,20 @@
 from datetime import datetime
 
-from outatime.granularity.granularity import MonthlyGranularity
+from outatime.granularity.granularity import MonthlyGranularity, QuarterlyGranularity, YearlyGranularity
 from outatime.timeseries.batches import aggregate
+from outatime.util.relativedelta import relativedelta
 from test.utils import data_generation
 
 
-def take_first(_list):
-    if _list:
-        return _list[0]
+def take_first(list_):
+    if list_:
+        return list_[0]
+    return None
+
+
+def take_last(list_):
+    if list_:
+        return list_[-1]
     return None
 
 
@@ -30,6 +37,29 @@ def test_aggregate():
         res[1].data == tsl.get(datetime.strptime("2020-02-01", "%Y-%m-%d").date()).data,
         res[-2].data == tsl.get(datetime.strptime("2024-12-01", "%Y-%m-%d").date()).data,
         res[-1].data == tsl.get(datetime.strptime("2025-01-01", "%Y-%m-%d").date()).data,
+    ]
+    assert all(expected_data), "Unexpected results."
+
+
+def test_aggregate_on_last():
+    tsl = data_generation()
+
+    res = aggregate(tsl, granularity=MonthlyGranularity(), method=take_last)
+    assert len(res) == 61, "Unexpected number of elements in resulting time series."
+
+    expected_dates = [
+        res[0].day == datetime.strptime("2020-01-01", "%Y-%m-%d").date(),
+        res[1].day == datetime.strptime("2020-02-01", "%Y-%m-%d").date(),
+        res[-2].day == datetime.strptime("2024-12-01", "%Y-%m-%d").date(),
+        res[-1].day == datetime.strptime("2025-01-01", "%Y-%m-%d").date()
+    ]
+    assert all(expected_dates), "Unexpected dates."
+
+    expected_data = [
+        res[0].data == tsl.get(datetime.strptime("2020-01-31", "%Y-%m-%d").date()).data,
+        res[1].data == tsl.get(datetime.strptime("2020-02-29", "%Y-%m-%d").date()).data,
+        res[-2].data == tsl.get(datetime.strptime("2024-12-31", "%Y-%m-%d").date()).data,
+        res[-1].data == tsl[-1].data
     ]
     assert all(expected_data), "Unexpected results."
 

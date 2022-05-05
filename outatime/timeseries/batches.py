@@ -71,7 +71,7 @@ def aggregate(
             res.append(
                 TimeSeriesData(
                     day=reference_day,
-                    data=method([element.data for element in temp_ts[idx_min:idx_max]])
+                    data=method([element.data for element in temp_ts[idx_min:idx_max+1]])
                 )
             )
 
