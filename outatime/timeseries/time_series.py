@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import List
 
 from ..dataclass.time_series_data import TimeSeriesData
-from ..granularity.granularity import Granularity, DailyGranularity
+from ..granularity.granularity import *
 from ..util.bisect import index_of, find_delimiters
 
 
@@ -86,6 +86,7 @@ class TimeSeries(List[TimeSeriesData]):
             self.__refresh()
 
     def copy(self):
+        """Return a deep copy of the list."""
         return self.__deepcopy__()
 
     def cut(self, min_date: date, max_date: date, inplace: bool = False):
