@@ -3,6 +3,7 @@ from datetime import date
 from functools import cached_property
 from typing import List
 
+from .inference import infer_ts_granularity
 from ..dataclass.time_series_data import TimeSeriesData
 from ..granularity.granularity import *
 from ..util.bisect import index_of, find_delimiters
@@ -12,6 +13,9 @@ def get_day(x):
     return x.day
 
 
+default_granularity_set = [YearlyGranularity, QuarterlyGranularity, MonthlyGranularity, WeeklyGranularity, DailyGranularity]
+
+
 class TimeSeries(List[TimeSeriesData]):
     """
     Class that inherits list to add useful methods for time series management.
@@ -19,10 +23,16 @@ class TimeSeries(List[TimeSeriesData]):
     """
     data_granularity: Granularity
 
-    def __init__(self, data=[], data_granularity: Granularity = DailyGranularity()):
+    def __init__(self,
+                 data: list = [],
+                 possible_granularity_list: list = default_granularity_set,
+                 ):
         super().__init__(data)
-        self.data_granularity = data_granularity
-        self.__sort__()
+        self.possible_granularity_list = possible_granularity_list
+        if data:
+            self.__infer_data_granularity()
+        else:
+            self.data_granularity = None
 
     def __add__(self, other):
         super().__add__(other)
@@ -54,9 +64,13 @@ class TimeSeries(List[TimeSeriesData]):
         if hasattr(self, 'dates'):
             del self.dates
 
+    def __infer_data_granularity(self):
+        self.data_granularity = infer_ts_granularity(self, self.possible_granularity_list)
+
     def __refresh(self):
         """Sort the timeseries by date and reset its properties."""
         self.__sort__()
+        self.__infer_data_granularity()
         self.__clear_cache()
 
     @property
@@ -184,7 +198,7 @@ class TimeSeries(List[TimeSeriesData]):
             self[:] = resampled
             self.data_granularity = granularity
         else:
-            return self.__class__(resampled, data_granularity=granularity)
+            return self.__class__(resampled, possible_granularity_list=self.possible_granularity_list)
 
     def update(self, __list: List[TimeSeriesData]):
         """

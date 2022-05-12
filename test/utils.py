@@ -5,8 +5,10 @@ from outatime.dataclass.time_series_data import TimeSeriesData
 from outatime.granularity.granularity import *
 from outatime.timeseries.time_series import TimeSeries
 
+default_granularity_set = [YearlyGranularity, QuarterlyGranularity, MonthlyGranularity, WeeklyGranularity, DailyGranularity]
 
-def data_generation(start_date='2020-01-07', end_date='2025-01-04', step=relativedelta(days=1), empty_data_step=2, empty_data={}):
+
+def data_generation(start_date='2020-01-07', end_date='2025-01-04', step=relativedelta(days=1), empty_data_step=2, empty_data={}, possible_granularity_list=default_granularity_set):
     z = []
     i = 0
     print("Generating input time series...")
@@ -23,7 +25,7 @@ def data_generation(start_date='2020-01-07', end_date='2025-01-04', step=relativ
 
         start_date += step
 
-    tsl = TimeSeries(z)
+    tsl = TimeSeries(z, possible_granularity_list=possible_granularity_list)
     print(f"*** Executed in: {round(time.time() - t, 4)}s.")
     print("Done.")
     return tsl
