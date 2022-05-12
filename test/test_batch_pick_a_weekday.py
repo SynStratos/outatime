@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from outatime.granularity.granularity import MonthlyGranularity
+from outatime.granularity.granularity import MonthlyGranularity, DailyGranularity
 from outatime.timeseries.batches import pick_a_weekday
+from outatime.util.relativedelta import relativedelta
 from test.utils import data_generation
 
 
@@ -60,3 +61,12 @@ def test_pick_a_weekday_all_wds():
             weekday=i
         )
         assert all([day.weekday() == i for day in res.dates]), "Unexpected days of week in resulting time series."
+
+
+def test_pick_a_weekday_lower_granularity():
+    tsl = data_generation(start_date='2020-01-31', end_date='2020-12-31', step=relativedelta(months=1))
+    try:
+        _ = pick_a_weekday(tsl, granularity=DailyGranularity())
+        raise AssertionError("Exception not caught.")
+    except AssertionError:
+        pass
