@@ -6,7 +6,7 @@ def test_index_of():
     assert index_of(_list, 'b') == 1, "Wrong index returned."
     try:
         _ = index_of(_list, 'g')
-        raise AssertionError("Exception not found.")
+        raise AssertionError("Exception not caught.")
     except ValueError:
         pass
 
