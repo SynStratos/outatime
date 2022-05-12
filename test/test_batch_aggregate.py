@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from outatime.granularity.granularity import MonthlyGranularity, QuarterlyGranularity, YearlyGranularity
+from outatime.granularity.granularity import MonthlyGranularity, QuarterlyGranularity, YearlyGranularity, \
+    DailyGranularity
 from outatime.timeseries.batches import aggregate
 from outatime.util.relativedelta import relativedelta
 from test.utils import data_generation
@@ -131,3 +132,19 @@ def test_aggregate_drop_tails():
         res[-1].data == tsl.get(datetime.strptime("2024-12-06", "%Y-%m-%d").date()).data,
     ]
     assert all(expected_data), "Unexpected results."
+
+
+def test_aggregate_same_granularity():
+    tsl = data_generation(start_date='2020-01-31', end_date='2020-12-31', step=relativedelta(months=1))
+    res = aggregate(tsl, granularity=MonthlyGranularity(), first_day_of_batch=0, method=take_first)
+
+    assert all(tsl_day.data == res_day.data for tsl_day, res_day in zip(tsl, res)), "Unexpected result content"
+
+
+def test_aggregate_lower_granularity():
+    tsl = data_generation(start_date='2020-01-31', end_date='2020-12-31', step=relativedelta(months=1))
+    try:
+        _ = aggregate(tsl, granularity=DailyGranularity(), first_day_of_batch=0, method=take_first)
+        raise AssertionError("Exception not caught.")
+    except AssertionError:
+        pass

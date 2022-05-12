@@ -2,6 +2,7 @@ from datetime import datetime
 
 from outatime.granularity.granularity import MonthlyGranularity
 from outatime.timeseries.batches import split
+from outatime.util.relativedelta import relativedelta
 from test.utils import data_generation
 
 
@@ -42,3 +43,12 @@ def test_split_drop_tails():
         res[-1][-1].day == datetime.strptime("2024-12-31", "%Y-%m-%d").date()
     ]
     assert all(expected_dates), "Unexpected dates."
+
+
+def test_split_lower_granularity():
+    tsl = data_generation(start_date='2020-01-31', end_date='2020-12-31', step=relativedelta(months=1))
+    try:
+        _ = split(tsl, granularity=MonthlyGranularity())
+        raise AssertionError("Exception not caught.")
+    except AssertionError:
+        pass
