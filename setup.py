@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name='outatime',
     packages=setuptools.find_packages(),
-    version='2.0.0',
+    version='2.1.0',
     description='Python framework to manage time series.',
     long_description=long_description,
     long_description_content_type="text/markdown",
