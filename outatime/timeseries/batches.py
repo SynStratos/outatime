@@ -86,7 +86,8 @@ def aggregate(
 def pick_a_day(
         ts: TimeSeries,
         granularity: Granularity = WeeklyGranularity(),
-        day_of_batch: int = -1
+        day_of_batch: int = -1,
+        default=None,
 ) -> TimeSeries:
     """
     Divides the input time series in many sub-sets for each contained time step 
@@ -99,6 +100,8 @@ def pick_a_day(
         input series. Defaults to WeeklyGranularity().
         day_of_batch (int, optional): The day of the time step to retrieve
         (0-indexed). Defaults to -1.
+        default (optional): Set a default value for missing days.
+        Defaults to None.
 
     Returns:
         TimeSeries: A new time series with only a day for each step.
@@ -114,7 +117,7 @@ def pick_a_day(
 
     while f_day <= ts.end_date:
         res.append(
-            deepcopy(ts.get(day=f_day))
+            deepcopy(ts.get(day=f_day, value=default))
         )
 
         f_day += granularity.delta
@@ -127,7 +130,8 @@ def pick_a_weekday(
         ts: TimeSeries,
         granularity: Granularity = WeeklyGranularity(),
         day_of_batch: int = -1,
-        weekday: int = 0
+        weekday: int = 0,
+        default=None,
 ) -> TimeSeries:
     """
     Divides the input time series in many sub-sets for each contained time step
@@ -142,6 +146,8 @@ def pick_a_weekday(
         (0-indexed). Defaults to -1.
         weekday (int, optional): The day of the time step to use as
         first delimiter (1-indexed). Defaults to 1.
+        default (optional): Set a default value for missing days.
+        Defaults to None.
 
     Returns:
         TimeSeries: A new time series with only a day for each step.
@@ -156,7 +162,7 @@ def pick_a_weekday(
 
     while f_day <= ts.end_date:
         res.append(
-            deepcopy(ts.get(day=f_day, value=None))
+            deepcopy(ts.get(day=f_day, value=default))
         )
 
         f_day += granularity.delta
