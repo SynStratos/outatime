@@ -1,7 +1,9 @@
 from datetime import datetime
 
+from outatime.dataclass.time_series_data import TimeSeriesData
 from outatime.granularity.granularity import MonthlyGranularity, DailyGranularity
 from outatime.timeseries.batches import pick_a_day
+from outatime.timeseries.time_series import TimeSeries
 from outatime.util.relativedelta import relativedelta
 from test.utils import data_generation
 
@@ -43,3 +45,16 @@ def test_pick_a_day_lower_granularity():
         raise AssertionError("Exception not caught.")
     except AssertionError:
         pass
+
+
+def test_pick_a_day_default_value():
+    tsl = TimeSeries(
+        [
+            TimeSeriesData(day=datetime.strptime('2020-01-01', "%Y-%m-%d").date(), data={}),
+            TimeSeriesData(day=datetime.strptime('2020-02-01', "%Y-%m-%d").date(), data={}),
+            TimeSeriesData(day=datetime.strptime('2020-04-01', "%Y-%m-%d").date(), data={}),
+        ]
+    )
+    res = pick_a_day(tsl, day_of_batch=0, granularity=MonthlyGranularity(), default={'missing': 0})
+
+    assert res[2].data == {'missing': 0}, "Unexpected default value for missing day."
