@@ -1,10 +1,7 @@
 from copy import deepcopy
 from datetime import datetime
 
-from outatime.granularity.granularity import MonthlyGranularity, WeeklyGranularity
-from outatime.util.relativedelta import relativedelta
-
-from test.utils import data_generation, compare
+from test.utils import data_generation
 
 
 def test_deepcopy():

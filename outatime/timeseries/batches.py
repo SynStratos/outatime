@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List
+from typing import List, Callable, Any
 from ..dataclass.time_series_data import TimeSeriesData
 from ..granularity.granularity import Granularity, WeeklyGranularity
 from ..granularity.utils import get_first_available_beginning
@@ -9,7 +9,7 @@ from ..util.bisect import *
 
 def aggregate(
         ts: TimeSeries,
-        method,
+        method: Callable[[List[Any]], Any],
         granularity: Granularity = WeeklyGranularity(),
         first_day_of_batch: int = 0,
         last_day_of_batch: int = -1,
@@ -25,8 +25,8 @@ def aggregate(
         ts (TimeSeries): Input time series.
         granularity (Granularity, optional): Time step to use to divide the 
         input series. Defaults to WeeklyGranularity().
-        method: Aggregation function to apply.
-        first_day_of_batch (int, optional): The day of the time step to use as 
+        method (Callable[[List[Any]], Any]): Aggregation function to apply.
+        first_day_of_batch (int, optional): The day of the time step to use as
         first delimiter (0-indexed). Defaults to 0.
         last_day_of_batch (int, optional): The day of the time step to use as
         last delimiter (0-indexed). Defaults to -1.

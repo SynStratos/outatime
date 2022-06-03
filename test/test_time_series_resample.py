@@ -5,7 +5,10 @@ from test.utils import data_generation, compare
 
 
 def resample_take_first(list_: list):
-    return list_[0]
+    if len(list_) > 0:
+        return list_[0]
+    else:
+        return None
 
 
 def test_resample_to_higher_granularity():
@@ -88,3 +91,12 @@ def test_resample_to_lower_granularity_no_method():
     assert compare(expected_res, res.dates), "Unexpected resample dates."
     assert res[0].data is None, "Unexpected resample data."
     assert res[-1].data is None, "Unexpected resample data."
+
+
+def test_resample_bad_method():
+    tsl = data_generation(start_date='2020-01-01', end_date='2020-02-01', step=relativedelta(days=1))
+    try:
+        _ = tsl.resample(granularity=MonthlyGranularity(), method=sum)
+        raise AssertionError("Exception not caught.")
+    except TypeError:
+        pass

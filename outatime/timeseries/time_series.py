@@ -1,7 +1,7 @@
 import pickle
 from datetime import date
 from functools import cached_property
-from typing import List
+from typing import List, Callable, Any
 
 from .inference import infer_ts_granularity
 from ..dataclass.time_series_data import TimeSeriesData
@@ -151,7 +151,7 @@ class TimeSeries(List[TimeSeriesData]):
 
     def resample(self,
                  granularity: Granularity = DailyGranularity(),
-                 method=None,
+                 method: Callable[[List[Any]], Any] = None,
                  index_of_granularity: int = 0,
                  inplace: bool = False,
                  ):
@@ -173,8 +173,9 @@ class TimeSeries(List[TimeSeriesData]):
         Args:
             granularity (Granularity, optional): Time step to use for
             selecting ranges. Defaults to DailyGranularity().
-            method (None, optional): Method to apply when evaluating the
-            value of data for a time step. Defaults to None.
+            method (Callable[[List[Any]], Any], optional): Method to
+            apply when evaluating the value of data for a time step.
+            Defaults to None.
             index_of_granularity (int, optional): The day of the time step
             to pick as reference (0-indexed). Defaults to 0.
             inplace (bool, optional): Original time series is overwritten
@@ -194,10 +195,7 @@ class TimeSeries(List[TimeSeriesData]):
             idx_min, idx_max = find_delimiters(temp_ts.dates, step_first_day, step_last_day)
             subset = temp_ts[idx_min:idx_max + 1]
 
-            try:
-                data = method([element.data for element in subset])
-            except:
-                data = None
+            data = method([element.data for element in subset]) if method else None
 
             resampled.append(
                 TimeSeriesData(
