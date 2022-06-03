@@ -24,12 +24,17 @@ class TimeSeries(List[TimeSeriesData]):
     data_granularity: Granularity
 
     def __init__(self,
-                 data: list = [],
-                 possible_granularity_list: list = default_granularity_set,
+                 data=None,
+                 possible_granularity_list=None,
                  ):
         super().__init__(data)
+        if possible_granularity_list is None:
+            possible_granularity_list = default_granularity_set
+        if data is None:
+            data = []
         self.possible_granularity_list = possible_granularity_list
-        if data:
+
+        if len(data) > 1:
             self.__infer_data_granularity()
         else:
             self.data_granularity = None
