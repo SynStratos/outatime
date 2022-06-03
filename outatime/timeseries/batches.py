@@ -40,6 +40,7 @@ def aggregate(
     """
     assert first_day_of_batch >= 0, "'first_day_of_batch' can't be lesser than 0."
     assert last_day_of_batch >= -1 and last_day_of_batch != 0, "'last_day_of_batch' can't be lesser than -1 or equal to 0."
+    assert store_day_of_batch >= -1, "'store_day_of_batch' can't be lesser than -1."
 
     assert ts.data_granularity.delta <= granularity.delta, "Can't shrink the time series to a lower level granularity."
 
@@ -71,7 +72,7 @@ def aggregate(
             res.append(
                 TimeSeriesData(
                     day=reference_day,
-                    data=method([element.data for element in temp_ts[idx_min:idx_max+1]])
+                    data=method([element.data for element in subset])
                 )
             )
 
