@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List
+from typing import List, Callable, Any
 from ..dataclass.time_series_data import TimeSeriesData
 from ..granularity.granularity import Granularity, WeeklyGranularity
 from ..granularity.utils import get_first_available_beginning
@@ -9,7 +9,7 @@ from ..util.bisect import *
 
 def aggregate(
         ts: TimeSeries,
-        method,
+        method: Callable[[List[Any]], Any],
         granularity: Granularity = WeeklyGranularity(),
         first_day_of_batch: int = 0,
         last_day_of_batch: int = -1,
@@ -25,8 +25,8 @@ def aggregate(
         ts (TimeSeries): Input time series.
         granularity (Granularity, optional): Time step to use to divide the 
         input series. Defaults to WeeklyGranularity().
-        method: Aggregation function to apply.
-        first_day_of_batch (int, optional): The day of the time step to use as 
+        method (Callable[[List[Any]], Any]): Aggregation function to apply.
+        first_day_of_batch (int, optional): The day of the time step to use as
         first delimiter (0-indexed). Defaults to 0.
         last_day_of_batch (int, optional): The day of the time step to use as
         last delimiter (0-indexed). Defaults to -1.
@@ -40,6 +40,7 @@ def aggregate(
     """
     assert first_day_of_batch >= 0, "'first_day_of_batch' can't be lesser than 0."
     assert last_day_of_batch >= -1 and last_day_of_batch != 0, "'last_day_of_batch' can't be lesser than -1 or equal to 0."
+    assert store_day_of_batch >= -1, "'store_day_of_batch' can't be lesser than -1."
 
     assert ts.data_granularity.delta <= granularity.delta, "Can't shrink the time series to a lower level granularity."
 
@@ -71,7 +72,7 @@ def aggregate(
             res.append(
                 TimeSeriesData(
                     day=reference_day,
-                    data=method([element.data for element in temp_ts[idx_min:idx_max+1]])
+                    data=method([element.data for element in subset])
                 )
             )
 

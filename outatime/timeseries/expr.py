@@ -1,17 +1,10 @@
+from typing import Callable, Any
+
 from ..dataclass.time_series_data import TimeSeriesData
 from ..timeseries.time_series import TimeSeries
 
 
-def take_first_available(a, b):
-    if a is not None:
-        return a
-    elif b is not None:
-        return b
-    else:
-        raise Exception("Both arguments are None.")
-
-
-def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method=take_first_available) -> TimeSeries:
+def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method: Callable[[Any, Any], Any]) -> TimeSeries:
     """
     Given two input time series, generates a new time series with only shared 
     days and all the contained values.
@@ -19,8 +12,8 @@ def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method=take_firs
     Args:
         tsl_a (TimeSeries): First input time series.
         tsl_b (TimeSeries): Second input time series.
-        conflict_method (None, optional): Method to apply when choosing
-        data for matching days. Defaults to take_first_available.
+        conflict_method (Callable[[Any, Any], Any]): Method to apply
+        when choosing data for matching days.
 
     Returns:
         TimeSeries: Output timeseries with shared days.
@@ -38,7 +31,7 @@ def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method=take_firs
     return TimeSeries(intersection_result)
 
 
-def union(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method=take_first_available) -> TimeSeries:
+def union(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method: Callable[[Any, Any], Any]) -> TimeSeries:
     """
     Given two input time series, generates a new time series with the union of 
     all days of both series.
@@ -46,8 +39,8 @@ def union(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method=take_first_avail
     Args:
         tsl_a (TimeSeries): First input time series.
         tsl_b (TimeSeries): Second input time series.
-        conflict_method (None, optional): Method to apply when choosing
-        data for matching days. Defaults to take_first_available.
+        conflict_method (Callable[[Any, Any], Any]): Method to apply
+        when choosing data for matching days.
 
     Returns:
         TimeSeries: Output timeseries with all days.

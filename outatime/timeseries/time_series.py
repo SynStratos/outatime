@@ -1,7 +1,7 @@
 import pickle
 from datetime import date
 from functools import cached_property
-from typing import List
+from typing import List, Callable, Any
 
 from .inference import infer_ts_granularity
 from ..dataclass.time_series_data import TimeSeriesData
@@ -24,12 +24,17 @@ class TimeSeries(List[TimeSeriesData]):
     data_granularity: Granularity
 
     def __init__(self,
-                 data: list = [],
-                 possible_granularity_list: list = default_granularity_set,
+                 data=None,
+                 possible_granularity_list=None,
                  ):
         super().__init__(data)
+        if possible_granularity_list is None:
+            possible_granularity_list = default_granularity_set
+        if data is None:
+            data = []
         self.possible_granularity_list = possible_granularity_list
-        if data:
+
+        if len(data) > 1:
             self.__infer_data_granularity()
         else:
             self.data_granularity = None
@@ -146,9 +151,9 @@ class TimeSeries(List[TimeSeriesData]):
 
     def resample(self,
                  granularity: Granularity = DailyGranularity(),
+                 method: Callable[[List[Any]], Any] = None,
                  index_of_granularity: int = 0,
                  inplace: bool = False,
-                 default_data: ... = None
                  ):
         """
         Select only needed days for the given granularity.
@@ -168,31 +173,40 @@ class TimeSeries(List[TimeSeriesData]):
         Args:
             granularity (Granularity, optional): Time step to use for
             selecting ranges. Defaults to DailyGranularity().
+            method (Callable[[List[Any]], Any], optional): Method to
+            apply when evaluating the value of data for a time step.
+            Defaults to None.
             index_of_granularity (int, optional): The day of the time step
             to pick as reference (0-indexed). Defaults to 0.
             inplace (bool, optional): Original time series is overwritten
             if set to True. Defaults to False.
-            default_data (None, optional): Data to store in days that
-            can't be found. Defaults to None.
         """
-        f_day = granularity.get_n_day_of_granularity(
-            day=self.start_date,
-            idx=index_of_granularity
-        )
         resampled = []
         temp_ts = self.__deepcopy__()
 
         resampling_end_date = granularity.get_end_of_granularity(self.end_date)
 
-        while f_day <= resampling_end_date:
+        step_first_day = granularity.get_beginning_of_granularity(day=self.start_date)
+        step_last_day = granularity.get_end_of_granularity(day=step_first_day)
+
+        while step_last_day <= resampling_end_date:
+            day = granularity.get_n_day_of_granularity(day=step_first_day, idx=index_of_granularity)
+
+            idx_min, idx_max = find_delimiters(temp_ts.dates, step_first_day, step_last_day)
+            subset = temp_ts[idx_min:idx_max + 1]
+
+            data = method([element.data for element in subset]) if method else None
+
             resampled.append(
-                temp_ts.get(f_day, value=default_data)
+                TimeSeriesData(
+                    day=day,
+                    data=data
+                )
             )
-            f_day += granularity.delta
-            f_day = granularity.get_n_day_of_granularity(
-                day=f_day,
-                idx=index_of_granularity
-            )
+
+            temp_ts = temp_ts[idx_max + 1:]
+            step_first_day += granularity.delta
+            step_last_day = granularity.get_end_of_granularity(day=step_first_day)
 
         if inplace:
             self[:] = resampled
