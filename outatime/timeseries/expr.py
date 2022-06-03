@@ -2,7 +2,7 @@ from ..dataclass.time_series_data import TimeSeriesData
 from ..timeseries.time_series import TimeSeries
 
 
-def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method) -> TimeSeries:
+def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method: ...) -> TimeSeries:
     """
     Given two input time series, generates a new time series with only shared 
     days and all the contained values.
@@ -10,7 +10,7 @@ def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method) -> TimeS
     Args:
         tsl_a (TimeSeries): First input time series.
         tsl_b (TimeSeries): Second input time series.
-        conflict_method (None): Method to apply when choosing
+        conflict_method (Any): Method to apply when choosing
         data for matching days.
 
     Returns:
@@ -29,7 +29,7 @@ def intersection(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method) -> TimeS
     return TimeSeries(intersection_result)
 
 
-def union(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method) -> TimeSeries:
+def union(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method: ...) -> TimeSeries:
     """
     Given two input time series, generates a new time series with the union of 
     all days of both series.
@@ -37,7 +37,7 @@ def union(tsl_a: TimeSeries, tsl_b: TimeSeries, conflict_method) -> TimeSeries:
     Args:
         tsl_a (TimeSeries): First input time series.
         tsl_b (TimeSeries): Second input time series.
-        conflict_method (None): Method to apply when choosing
+        conflict_method (Any): Method to apply when choosing
         data for matching days.
 
     Returns:
