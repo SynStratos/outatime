@@ -27,11 +27,12 @@ class TimeSeries(List[TimeSeriesData]):
                  data=None,
                  possible_granularity_list=None,
                  ):
-        super().__init__(data)
         if possible_granularity_list is None:
             possible_granularity_list = default_granularity_set
         if data is None:
             data = []
+
+        super().__init__(data)
         self.possible_granularity_list = possible_granularity_list
 
         if len(data) > 1:
@@ -74,8 +75,9 @@ class TimeSeries(List[TimeSeriesData]):
 
     def __refresh(self):
         """Sort the timeseries by date and reset its properties."""
-        self.__sort__()
-        self.__infer_data_granularity()
+        if self.__len__() > 1:
+            self.__sort__()
+            self.__infer_data_granularity()
         self.__clear_cache()
 
     @property

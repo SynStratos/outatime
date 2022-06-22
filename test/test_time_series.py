@@ -1,6 +1,9 @@
+import random
 from copy import deepcopy
 from datetime import datetime
 
+from outatime.dataclass.time_series_data import TimeSeriesData
+from outatime.timeseries.time_series import TimeSeries
 from test.utils import data_generation
 
 
@@ -31,3 +34,22 @@ def test_cut_inplace():
 
     assert tsl[0].day == min_date, "Starting date is wrong."
     assert tsl[-1].day == max_date, "Ending date is wrong."
+
+
+def test_empty_timeseries():
+    try:
+        tsl = TimeSeries()
+        assert len(tsl) == 0, "Unexpected length."
+    except:
+        raise AssertionError("Unable to create an empty time series.")
+
+
+def test_single_element_timeseries():
+    tsl = TimeSeries()
+    try:
+        data = {'pippo': random.randint(200, 300), 'pluto': random.randint(200, 300)}
+        day = TimeSeriesData(day=datetime.fromisoformat('2022-01-01'), data=data)
+        tsl.append(day)
+    except:
+        raise AssertionError("Unable to append a single element to empty time series.")
+
