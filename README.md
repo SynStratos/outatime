@@ -39,6 +39,7 @@ outatime
 ├── timeseries
 │   ├── batches.py --> Set of methods to operate on time series dividing them into batches.
 │   ├── expr.py --> Set of operations between time series.
+│   ├── inference.py --> Method to infer granularity of a time series.
 │   └── time_series.py --> Core class that represents a series of daily records.
 │
 └── util
