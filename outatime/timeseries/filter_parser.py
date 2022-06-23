@@ -1,8 +1,5 @@
-from parser import ParserError
-
 import lark
 from lark import v_args
-
 
 grammar = """
     ?start: expression
@@ -106,6 +103,7 @@ class FilterParser(lark.Transformer):
 
     def make_filter(self, period, op, value):
         """Parse a filter in the order KEY - OPERATOR - VALUE."""
+
         def _f(x):
             return self.operators[op](getattr(x.day, period), int(value))
 
@@ -113,6 +111,7 @@ class FilterParser(lark.Transformer):
 
     def make_rev_filter(self, value, op, period):
         """Parse a filter in the order VALUE - OPERATOR - KEY."""
+
         def _f(x):
             return self.operators[op](int(value), getattr(x.day, period))
 
@@ -135,6 +134,13 @@ class FilterParser(lark.Transformer):
             try:
                 return lark.Lark(grammar, parser='lalr', transformer=self.__class__()).parse(query)
             except:
-                raise ParserError("Bad query string.")
+                raise FilterParserError("Bad query string.")
 
         return _parse
+
+
+class FilterParserError(Exception):
+    msg = "Bad query string."
+
+    def __init__(self, msg=msg, *args):
+        super().__init__(msg, *args)

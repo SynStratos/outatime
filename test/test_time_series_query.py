@@ -1,5 +1,4 @@
-from parser import ParserError
-
+from outatime.timeseries.filter_parser import FilterParserError
 from test.utils import data_generation
 
 
@@ -109,12 +108,12 @@ def test_time_series_bad_request():
     try:
         _ = tsl.query(query)
         raise AssertionError("Uncaught exception.")
-    except ParserError:
+    except FilterParserError:
         pass
 
     query = "bad_req"
     try:
         _ = tsl.query(query)
         raise AssertionError("Uncaught exception.")
-    except ParserError:
+    except FilterParserError:
         pass
