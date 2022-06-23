@@ -3,6 +3,7 @@ from datetime import date
 from functools import cached_property
 from typing import List, Callable, Any
 
+from .filter_parser import FilterParser
 from .inference import infer_ts_granularity
 from ..dataclass.time_series_data import TimeSeriesData
 from ..granularity.granularity import *
@@ -22,6 +23,7 @@ class TimeSeries(List[TimeSeriesData]):
     It contains only TimeSeriesData objects as elements.
     """
     data_granularity: Granularity
+    filter_parser = FilterParser().get_parser()
 
     def __init__(self,
                  data=None,
@@ -226,3 +228,33 @@ class TimeSeries(List[TimeSeriesData]):
         """
         for new_element in __list:
             self.append(new_element)
+
+    def query(self, expr: str, inplace: bool = False):
+        """
+        Query the time series data with a boolean expression.
+
+        Example:
+            [TimeSeriesData(day=2022-01-14, data={'a': 1, 'b': 8}),
+            TimeSeriesData(day=2022-02-16, data={'a': 3, 'b': 8}),
+            TimeSeriesData(day=2022-03-16, data={'a': 3, 'b': 8}),
+            TimeSeriesData(day=2022-04-16, data={'a': 3, 'b': 8})]
+
+            expr = "month <= 2 and day < 20"
+
+            Returns:
+                [TimeSeriesData(day=2022-01-14, data={'a': 1, 'b': 8}),
+                TimeSeriesData(day=2022-02-16, data={'a': 3, 'b': 8})]
+
+        Args:
+            expr (str): The query string to evaluate.
+            inplace (bool, optional): Original time series is overwritten
+            if set to True. Defaults to False.
+        """
+        query_filter, _ = self.filter_parser(expr)
+        filtered = filter(lambda x: query_filter(x), self)
+        filtered_ts = list(filtered)
+
+        if inplace:
+            self[:] = filtered_ts
+        else:
+            return self.__class__(filtered_ts)

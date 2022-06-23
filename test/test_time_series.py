@@ -52,4 +52,3 @@ def test_single_element_timeseries():
         tsl.append(day)
     except:
         raise AssertionError("Unable to append a single element to empty time series.")
-
