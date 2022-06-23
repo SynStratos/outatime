@@ -27,6 +27,7 @@ setuptools.setup(
         'python-dateutil',
         'statsmodels',
         'numpy',
-        'scipy'
+        'scipy',
+        'lark'
     ]
 )
