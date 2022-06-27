@@ -8,9 +8,13 @@ Welcome to outatime's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :numbered:
+   :caption: Table of Contents
+   :name: mastertoc
 
-
+   about
+   install
+   tutorial
 
 Indices and tables
 ==================

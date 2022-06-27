@@ -10,7 +10,7 @@ description = 'Python framework to manage time series.'
 # Version-trick to have version-info in a single place,
 # taken from: http://stackoverflow.com/questions/2058802/how-can-i-get-the-
 # version-defined-in-setup-py-setuptools-in-my-package
-##
+
 def read_project_version():
     fglobals = {}
     with io.open(os.path.join(mydir, name, '_version.py'), encoding='UTF-8') as fd:
