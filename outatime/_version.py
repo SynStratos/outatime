@@ -11,8 +11,8 @@ __updated__ = "2022-06-24 17:00:00"
 
 __title__ = 'outatime'
 
-__author__ = 'SynStratos <synstratos.dev@gmail.com>'
+__author__ = 'Luca Spartera <synstratos.dev@gmail.com>'
 
 __license__ = 'MIT license, see LICENSE file'
 
-__copyright__ = 'Copyright 2022, SynStratos'
+__copyright__ = 'Copyright 2022 Luca Spartera'

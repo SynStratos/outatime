@@ -1,1 +1,1 @@
-- SynStratos <synstratos.dev@gmail.com>
+- Luca Spartera <synstratos.dev@gmail.com>

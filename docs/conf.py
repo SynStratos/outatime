@@ -23,8 +23,8 @@ sys.path.append(abspath(join(dirname(__file__), '_ext')))
 # -- Project information -----------------------------------------------------
 
 project = 'outatime'
-copyright = '2022, SynStratos'
-author = 'SynStratos'
+copyright = '2022 Luca Spartera'
+author = 'Luca Spartera'
 
 # The full version, including alpha/beta/rc tags
 version = '3.1.0'
