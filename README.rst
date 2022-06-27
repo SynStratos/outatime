@@ -3,8 +3,8 @@
 #######################################################################
 outatime: Python Framework to Manage Time Series.
 #######################################################################
-|pypi_ver| |test_status| |cover_status| |docs_status| |dependencies|
-|github_issues| |python_ver| |proj_license| |binder|
+|pypi_ver| |test_status| |cover_status| |dependencies|
+|github_issues| |python_ver| |proj_license|
 
 :release:       3.1.0
 :date:          2022-05-10 10:30:00
@@ -27,13 +27,15 @@ associated with a given day, and **Granularity**, to indicate a given time
 interval (e.g. daily, weekly, monthly, etc.).
 
 The object related to a single day (**TimeSeriesData**) contains two attributes:
-* day - the reference date for that record
-* data - an object that collects any information for that day
+
+* **day** - the reference date for that record
+* **data** - an object that collects any information for that day
 
 Why outatime?
 -------------
 Outatime allows to carry out numerous operations of different types on time series,
 as for example:
+
 * add or remove records
 * search records by date
 * exclude records outside a determined range
@@ -65,7 +67,8 @@ or download the last git version and use (with root privileges):
 .. _start-structure:
 Framework Structure
 ========
-.. code-block::
+.. code-block:: console
+
     outatime
     ├── dataclass
     │   └── time_series_data.py --> Class used to manage daily data.
@@ -96,3 +99,34 @@ Tutorial
 ========
 
 .. _end-tutorial:
+
+.. _start-badges:
+.. |test_status| image:: https://github.com/synstratos/outatime/actions/workflows/python-package.yml/badge.svg?branch=main
+    :alt: Build status
+    :target: https://github.com/synstratos/outatime/actions/workflows/python-package.yml/badge.svg?branch=main
+
+.. |cover_status| image:: https://coveralls.io/repos/github/synstratos/outatime/badge.svg
+    :target: https://coveralls.io/github/synstratos/outatime
+    :alt: Code coverage
+
+.. |pypi_ver| image::  https://img.shields.io/pypi/v/outatime.svg?
+    :target: https://pypi.python.org/pypi/outatime/
+    :alt: Latest Version in PyPI
+
+.. |python_ver| image:: https://img.shields.io/pypi/pyversions/outatime
+    :target: https://pypi.python.org/pypi/outatime/
+    :alt: Supported Python versions
+
+.. |github_issues| image:: https://img.shields.io/github/issues/synstratos/outatime.svg?
+    :target: https://github.com/synstratos/outatime/issues
+    :alt: Issues count
+
+.. |proj_license| image:: https://img.shields.io/github/license/synstratos/outatime
+    :target: https://raw.githubusercontent.com/synstratos/outatime/stable/LICENSE
+    :alt: Project License
+
+.. |dependencies| image:: https://requires.io/github/synstratos/outatime/requirements.svg?branch=stable
+    :target: https://requires.io/github/synstratos/outatime/requirements/?branch=stable
+    :alt: Requirements Status
+
+.. _end-badges:
