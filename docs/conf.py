@@ -10,6 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import io
 import os
 import sys
 from os.path import abspath, join, dirname
@@ -19,7 +20,11 @@ prj_dir = abspath(join(dirname(__file__), '..'))
 sys.path.insert(0, prj_dir)
 sys.path.append(abspath(join(dirname(__file__), 'outatime')))
 
-
+def read_project_version():
+    fglobals = {}
+    with io.open(os.path.join(prj_dir, 'outatime', '_version.py'), encoding='UTF-8') as fd:
+        exec(fd.read(), fglobals)  # To read __version__
+    return fglobals['__version__']
 # -- Project information -----------------------------------------------------
 
 project = 'outatime'
@@ -27,8 +32,8 @@ copyright = '2022 Luca Spartera'
 author = 'Luca Spartera'
 
 # The full version, including alpha/beta/rc tags
-version = '3.1.0'
-release = '3.1.0'
+version = read_project_version()
+release = read_project_version()
 
 
 # -- General configuration ---------------------------------------------------

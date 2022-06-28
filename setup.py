@@ -1,6 +1,5 @@
 import io
 import os
-import collections
 import setuptools
 
 name = 'outatime'
@@ -18,18 +17,9 @@ def read_project_version():
     return fglobals['__version__']
 
 
-with open('pypi.rst') as file:
-        long_description = file.read()
-
 setuptools.setup(
-    name=name,
     packages=setuptools.find_packages(),
-    version=read_project_version(),
-    description=description,
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    author='Luca Spartera',
-    author_email='synstratos.dev@gmail.com',
+    version="3.2.1", #read_project_version(),
     url=f'https://github.com/SynStratos/{name}',
     python_requires='>=3.8, <3.11',
     include_package_data=True,

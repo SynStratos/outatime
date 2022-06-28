@@ -1,17 +1,9 @@
-.. raw:: html
-
-   <p align="center">
-   <img src="https://i.ibb.co/z8MDfP3/outatime-banner.png" alt="OUTATIME">
-   </p>
------------------------------------------------------------------------
-
-#######################################################################
 outatime: Python framework to manage time series
 #######################################################################
 
-|pypi_ver| |test_status| |cover_status| |dependencies|
-|github_issues| |python_ver| |proj_license| |pypi_downloads|
-
+.. include:: README.rst
+    :start-after: .. _start-badges-list:
+    :end-before: .. _end-badges-list:
 
 .. include:: README.rst
     :start-after: .. _start-0-pypi:

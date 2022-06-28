@@ -1,31 +1,36 @@
 .. _start-intro:
-.. raw:: html
+.. image:: https://i.ibb.co/z8MDfP3/outatime-banner.png
+    :alt: OUTATIME
 
-   <p align="center">
-   <img src="https://i.ibb.co/z8MDfP3/outatime-banner.png" alt="OUTATIME">
-   </p>
 -----------------------------------------------------------------------
 
-#######################################################################
 outatime: Python framework to manage time series
-#######################################################################
-|pypi_ver| |test_status| |cover_status| |dependencies|
-|github_issues| |python_ver| |proj_license| |pypi_downloads|
+################################################
 
-:release:       3.1.0
+.. _start-badges-list:
+
+|pypi_ver| |test_status| |cover_status| |dependencies| |github_issues| |python_ver| |proj_license| |pypi_downloads|
+
+.. _end-badges-list:
+
+:release:       3.2.0
 :date:          2022-05-10 10:30:00
 :repository:    https://github.com/synstratos/outatime
 :pypi-repo:     https://pypi.org/project/outatime/
 :docs:          https://outatime.readthedocs.io/
 :keywords:      time, time-series, time series, time series data
-:developers:    .. include:: AUTHORS.rst
+:developers:
+    - Luca Spartera <synstratos.dev@gmail.com>
 
 .. _end-intro:
 
 .. _start-about:
+
 .. _start-0-pypi:
+
 About outatime
 ==============
+
 The main goal of this framework is to simplify the collection of temporal data
 and related operations.
 It is based on the concepts of **TimeSeries**, as a collection of ordered records
@@ -34,6 +39,7 @@ interval (e.g. daily, weekly, monthly, etc.).
 
 Why outatime?
 -------------
+
 Outatime allows to carry out numerous operations of different types on time series,
 as for example:
 
@@ -47,11 +53,14 @@ as for example:
 - other
 
 .. _end-0-pypi:
+
 .. _end-about:
 
 .. _start-install:
+
 Installation
 ============
+
 To install it use:
 
 .. code-block:: console
@@ -67,8 +76,10 @@ or download the last git version and use:
 .. _end-install:
 
 .. _start-tutorial:
+
 Tutorial
 ========
+
 Each time series is structured as an ordered list of daily items, always arranged in ascending chronological order.
 
 The object related to a single day (**TimeSeriesData**) contains two attributes:
@@ -92,6 +103,7 @@ It is possible, however, when constructing the time series, to give as input a s
 
 Create a new time series
 ------------------------
+
 To create your first time series, you need to collect data in individual objects of type TimeSeriesData.
 A list of these objects can be fed to our TimeSeries class.
 
@@ -160,6 +172,7 @@ You can also update the time series with multiple new inputs.
 
 Retrieve data
 -------------
+
 There are different ways to retrieve data from your time series.
 
 1. You can get a TimeSeriesData by its index in the TimeSeries object.
@@ -187,9 +200,9 @@ There are different ways to retrieve data from your time series.
     query_str = "month == 6 and day == 2022)
     ts.query(query_str, inplace=True)  # extracts all data for the month of June for the year 2022
 
-
 Manage the time series
 ----------------------
+
 A single item can be removed from the time series by accessing it by date.
 
 .. code-block:: console
@@ -232,6 +245,7 @@ Again, the **inplace** parameter can be set to **True** to overwrite the time se
 
 Split the time series
 ---------------------
+
 Operations can be performed on the time series that involve dividing it into sections defined by a user-chosen granularity.
 
 The **aggregate** method makes it possible to generate a new time series with reduced granularity by specifying which part of each interval to use.
@@ -275,6 +289,7 @@ For example, if I have a time series with daily granularity, I can get a list of
 .. _end-tutorial:
 
 .. _start-badges:
+
 .. |test_status| image:: https://github.com/synstratos/outatime/actions/workflows/python-package.yml/badge.svg?branch=stable
     :alt: Build status
     :target: https://github.com/synstratos/outatime/actions/workflows/python-package.yml/badge.svg?branch=stable
@@ -310,4 +325,5 @@ For example, if I have a time series with daily granularity, I can get a list of
 .. |conda_downloads| image:: https://img.shields.io/conda/dn/conda-forge/outatime?label=Conda%20Downloads&style=flat-square
     :target: https://anaconda.org/conda-forge/outatime
     :alt: Conda Downloads
+
 .. _end-badges:
