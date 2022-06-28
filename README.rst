@@ -14,7 +14,7 @@ outatime: Python framework to manage time series
 .. _end-badges-list:
 
 :release:       3.2.0
-:date:          2022-05-10 10:30:00
+:date:          2022-06-28 16:30:00
 :repository:    https://github.com/synstratos/outatime
 :pypi-repo:     https://pypi.org/project/outatime/
 :docs:          https://outatime.readthedocs.io/
@@ -294,8 +294,8 @@ For example, if I have a time series with daily granularity, I can get a list of
     :alt: Build status
     :target: https://github.com/synstratos/outatime/actions/workflows/python-package.yml/badge.svg?branch=stable
 
-.. |cover_status| image:: https://coveralls.io/repos/github/synstratos/outatime/badge.svg
-    :target: https://coveralls.io/github/synstratos/outatime
+.. |cover_status| image:: https://coveralls.io/repos/github/SynStratos/outatime/badge.svg
+    :target: https://coveralls.io/github/SynStratos/outatime
     :alt: Code coverage
 
 .. |pypi_ver| image::  https://img.shields.io/pypi/v/outatime.svg?

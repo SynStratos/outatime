@@ -43,8 +43,8 @@ class TimeSeries(List[TimeSeriesData]):
             self.data_granularity = None
 
     def __add__(self, other):
-        super().__add__(other)
-        self.__refresh()
+        ts = super(TimeSeries, self).__add__(other)
+        return self.__class__(ts)
 
     def __deepcopy__(self, *args):
         return pickle.loads(pickle.dumps(self))
@@ -256,5 +256,5 @@ class TimeSeries(List[TimeSeriesData]):
         Args:
             __list (List[TimeSeriesData]): Input list of new elements.
         """
-        for new_element in __list:
-            self.append(new_element)
+        res_ts_data = super(TimeSeries, self).__add__(__list)
+        self[:] = res_ts_data
