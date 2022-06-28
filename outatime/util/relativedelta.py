@@ -11,7 +11,7 @@ class relativedelta(rd.relativedelta):
 
     @property
     def total_months(self):
-        return (self.years * 12) + self.months
+        return (self.years * 12) + self.months + self.days/30
 
     @property
     def total_years(self):
