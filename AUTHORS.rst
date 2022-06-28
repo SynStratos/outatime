@@ -1,0 +1,1 @@
+- Luca Spartera <synstratos.dev@gmail.com>

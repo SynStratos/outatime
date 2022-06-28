@@ -153,6 +153,36 @@ class TimeSeries(List[TimeSeriesData]):
         except (KeyError, ValueError):
             return TimeSeriesData(day=day, data=value)
 
+    def query(self, expr: str, inplace: bool = False):
+        """
+        Query the time series data with a boolean expression.
+
+        Example:
+            [TimeSeriesData(day=2022-01-14, data={'a': 1, 'b': 8}),
+            TimeSeriesData(day=2022-02-16, data={'a': 3, 'b': 8}),
+            TimeSeriesData(day=2022-03-16, data={'a': 3, 'b': 8}),
+            TimeSeriesData(day=2022-04-16, data={'a': 3, 'b': 8})]
+
+            expr = "month <= 2 and day < 20"
+
+            Returns:
+                [TimeSeriesData(day=2022-01-14, data={'a': 1, 'b': 8}),
+                TimeSeriesData(day=2022-02-16, data={'a': 3, 'b': 8})]
+
+        Args:
+            expr (str): The query string to evaluate.
+            inplace (bool, optional): Original time series is overwritten
+            if set to True. Defaults to False.
+        """
+        query_filter, _ = self.filter_parser(expr)
+        filtered = filter(lambda x: query_filter(x), self)
+        filtered_ts = list(filtered)
+
+        if inplace:
+            self[:] = filtered_ts
+        else:
+            return self.__class__(filtered_ts)
+
     def resample(self,
                  granularity: Granularity = DailyGranularity(),
                  method: Callable[[List[Any]], Any] = None,
@@ -228,33 +258,3 @@ class TimeSeries(List[TimeSeriesData]):
         """
         for new_element in __list:
             self.append(new_element)
-
-    def query(self, expr: str, inplace: bool = False):
-        """
-        Query the time series data with a boolean expression.
-
-        Example:
-            [TimeSeriesData(day=2022-01-14, data={'a': 1, 'b': 8}),
-            TimeSeriesData(day=2022-02-16, data={'a': 3, 'b': 8}),
-            TimeSeriesData(day=2022-03-16, data={'a': 3, 'b': 8}),
-            TimeSeriesData(day=2022-04-16, data={'a': 3, 'b': 8})]
-
-            expr = "month <= 2 and day < 20"
-
-            Returns:
-                [TimeSeriesData(day=2022-01-14, data={'a': 1, 'b': 8}),
-                TimeSeriesData(day=2022-02-16, data={'a': 3, 'b': 8})]
-
-        Args:
-            expr (str): The query string to evaluate.
-            inplace (bool, optional): Original time series is overwritten
-            if set to True. Defaults to False.
-        """
-        query_filter, _ = self.filter_parser(expr)
-        filtered = filter(lambda x: query_filter(x), self)
-        filtered_ts = list(filtered)
-
-        if inplace:
-            self[:] = filtered_ts
-        else:
-            return self.__class__(filtered_ts)
