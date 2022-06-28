@@ -1,7 +1,13 @@
 .. _start-intro:
+.. raw:: html
+
+   <p align="center">
+   <img src="https://i.ibb.co/z8MDfP3/outatime-banner.png" alt="OUTATIME">
+   </p>
+-----------------------------------------------------------------------
 
 #######################################################################
-outatime: a python framework to manage time series.
+outatime: Python framework to manage time series
 #######################################################################
 |pypi_ver| |test_status| |cover_status| |dependencies|
 |github_issues| |python_ver| |proj_license| |pypi_downloads|

@@ -18,10 +18,8 @@ def read_project_version():
     return fglobals['__version__']
 
 
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
-    long_description = long_description.split("</p>")[1]
-    long_description = "# OUTATIME" + long_description
+with open('pypi.rst') as file:
+        long_description = file.read()
 
 setuptools.setup(
     name=name,
