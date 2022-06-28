@@ -14,7 +14,7 @@ outatime: Python framework to manage time series
 .. _end-badges-list:
 
 :release:       3.2.0
-:date:          2022-05-10 10:30:00
+:date:          2022-06-28 16:30:00
 :repository:    https://github.com/synstratos/outatime
 :pypi-repo:     https://pypi.org/project/outatime/
 :docs:          https://outatime.readthedocs.io/
