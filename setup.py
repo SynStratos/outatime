@@ -19,7 +19,7 @@ def read_project_version():
 
 setuptools.setup(
     packages=setuptools.find_packages(),
-    version="3.2.1", #read_project_version(),
+    version="3.2.0", #read_project_version(),
     url=f'https://github.com/SynStratos/{name}',
     python_requires='>=3.8, <3.11',
     include_package_data=True,
