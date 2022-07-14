@@ -100,6 +100,51 @@ def test_time_series_calc_queries():
     for element in filtered_tsl:
         assert element.day.month == 8, "Unexpected day after query."
 
+    query = "month == 2 - (-12+6)"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 8, "Unexpected day after query."
+
+    query = "month == 2 - (-2*3)"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 8, "Unexpected day after query."
+
+    query = "month == 17 % 2"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 1, "Unexpected day after query."
+
+    query = "month == 17 // 2"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 8, "Unexpected day after query."
+
+    query = "month == 3 ** 3"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 9, "Unexpected day after query."
+
+    query = "month == |-9|"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 9, "Unexpected day after query."
+
+    query = "month == |-3*3|"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 9, "Unexpected day after query."
+
+    query = "month == |-12+3|"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 9, "Unexpected day after query."
+
+    query = "month == |(-12+3)|"
+    filtered_tsl = tsl.query(query)
+    for element in filtered_tsl:
+        assert element.day.month == 9, "Unexpected day after query."
+
 
 def test_time_series_bad_request():
     tsl = data_generation()
