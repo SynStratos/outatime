@@ -41,10 +41,15 @@ grammar = """
     ?product: atom
         | product "*" atom  -> mul
         | product "/" atom  -> div
+        | product "//" atom -> floordiv
+        | product "%" atom -> mod
+        | product "**" atom -> pow
 
     ?atom: NUMBER -> number
          | "-" atom -> neg
          | "(" sum ")"
+         | "|" sum "|" -> abs
+         | "|" atom "|" -> abs
 
     %import common.CNAME -> NAME
     %import common.WORD -> WORD
@@ -59,7 +64,7 @@ grammar = """
 @v_args(inline=True)
 class FilterParser(lark.Transformer):
     import operator
-    from operator import add, truediv as div, mul, sub, neg
+    from operator import add, truediv as div, mul, sub, neg, mod, floordiv, pow, abs
     number = float
     period_name = str
 
