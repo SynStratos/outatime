@@ -10,7 +10,7 @@ def infer_ts_granularity(
     if len(data) < 2:
         return None
 
-    granularity_list.sort(key=lambda gr: gr.delta, reverse=True)
+    granularity_list = sorted(granularity_list, key=lambda gr: gr.delta, reverse=True)
 
     dates = [element.day for element in data]
     dates.sort()

@@ -24,6 +24,7 @@ class TimeSeries(List[TimeSeriesData]):
     """
     data_granularity: Granularity
     filter_parser = FilterParser().get_parser()
+    possible_granularity_list = []
 
     def __init__(self,
                  data=None,
@@ -35,7 +36,7 @@ class TimeSeries(List[TimeSeriesData]):
             data = []
 
         super().__init__(data)
-        self.possible_granularity_list = possible_granularity_list
+        self.possible_granularity_list[:] = possible_granularity_list
 
         if len(data) > 1:
             self.__infer_data_granularity()
