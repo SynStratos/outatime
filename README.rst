@@ -13,8 +13,8 @@ outatime: Python framework to manage time series
 
 .. _end-badges-list:
 
-:release:       3.2.0
-:date:          2022-06-28 16:30:00
+:release:       3.2.1
+:date:          2022-10-10 16:00:00
 :repository:    https://github.com/synstratos/outatime
 :pypi-repo:     https://pypi.org/project/outatime/
 :docs:          https://outatime.readthedocs.io/
@@ -192,12 +192,12 @@ There are different ways to retrieve data from your time series.
 
 .. code-block:: console
 
-    query_str = "month == 6 and day == 2022)
+    query_str = "month == 6 and year == 2022)
     ts_subset = ts.query(query_str)  # extracts all data for the month of June for the year 2022
 
 .. code-block:: console
 
-    query_str = "month == 6 and day == 2022)
+    query_str = "month == 6 and year == 2022)
     ts.query(query_str, inplace=True)  # extracts all data for the month of June for the year 2022
 
 Manage the time series
