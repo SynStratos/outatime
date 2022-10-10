@@ -41,10 +41,15 @@ grammar = """
     ?product: atom
         | product "*" atom  -> mul
         | product "/" atom  -> div
+        | product "//" atom -> floordiv
+        | product "%" atom -> mod
+        | product "**" atom -> pow
 
     ?atom: NUMBER -> number
          | "-" atom -> neg
          | "(" sum ")"
+         | "|" sum "|" -> abs
+         | "|" atom "|" -> abs
 
     %import common.CNAME -> NAME
     %import common.WORD -> WORD
@@ -59,7 +64,7 @@ grammar = """
 @v_args(inline=True)
 class FilterParser(lark.Transformer):
     import operator
-    from operator import add, truediv as div, mul, sub, neg
+    from operator import add, truediv as div, mul, sub, neg, mod, floordiv, pow, abs
     number = float
     period_name = str
 
@@ -128,11 +133,12 @@ class FilterParser(lark.Transformer):
 
     def get_parser(self):
         """Generate a parser method to use with the given grammar."""
+        lark_parser = lark.Lark(grammar, parser='lalr', transformer=self.__class__())
 
         @staticmethod
         def _parse(query):
             try:
-                return lark.Lark(grammar, parser='lalr', transformer=self.__class__()).parse(query)
+                return lark_parser.parse(query)
             except:
                 raise FilterParserError("Bad query string.")
 
