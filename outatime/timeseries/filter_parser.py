@@ -138,7 +138,7 @@ class FilterParser(lark.Transformer):
         @staticmethod
         def _parse(query):
             try:
-                lark_parser.parse(query)
+                return lark_parser.parse(query)
             except:
                 raise FilterParserError("Bad query string.")
 
