@@ -3,7 +3,7 @@ from datetime import date
 from functools import cached_property
 from typing import List, Callable, Any
 
-from .filter_parser import FilterParser
+from .filter_parser import FilterParserGenerator
 from .inference import infer_ts_granularity
 from ..dataclass.time_series_data import TimeSeriesData
 from ..granularity.granularity import *
@@ -23,7 +23,7 @@ class TimeSeries(List[TimeSeriesData]):
     It contains only TimeSeriesData objects as elements.
     """
     data_granularity: Granularity
-    filter_parser = FilterParser().get_parser()
+    filter_parser = FilterParserGenerator().get_parser()
     possible_granularity_list = []
 
     def __init__(self,
