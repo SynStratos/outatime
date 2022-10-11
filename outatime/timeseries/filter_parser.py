@@ -131,14 +131,20 @@ class FilterParser(lark.Transformer):
 
         return _f, period
 
+
+class FilterParserGenerator:
+    gen_grammar = grammar
+    gen_parser = 'lalr'
+    gen_transformer_class = FilterParser
+    lark_parser = lark.Lark(gen_grammar, parser=gen_parser, transformer=gen_transformer_class())
+
     def get_parser(self):
         """Generate a parser method to use with the given grammar."""
-        lark_parser = lark.Lark(grammar, parser='lalr', transformer=self.__class__())
 
         @staticmethod
         def _parse(query):
             try:
-                return lark_parser.parse(query)
+                return self.lark_parser.parse(query)
             except:
                 raise FilterParserError("Bad query string.")
 
